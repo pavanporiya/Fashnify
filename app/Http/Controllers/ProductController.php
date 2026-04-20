@@ -9,10 +9,30 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
     // FRONTEND
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::latest()->take(12)->get();
-        return view('frontend.home', compact('products'));
+        $query = Product::query();
+
+        // Filter
+        if ($request->category) {
+            $query->where('category', $request->category);
+        }
+
+        // Search
+        if ($request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Sorting
+        if ($request->sort == 'low-high') {
+            $query->orderBy('price', 'asc');
+        } elseif ($request->sort == 'high-low') {
+            $query->orderBy('price', 'desc');
+        }
+
+        $products = $query->paginate(8);
+
+        return view('product.index', compact('products'));
     }
 
     // ADMIN LIST
@@ -85,7 +105,7 @@ class ProductController extends Controller
             }
 
             $folder = 'products/' . $req->category;
-            
+
             // delete old image
             if ($product->image && Storage::disk('public')->exists($product->image)) {
                 Storage::disk('public')->delete($product->image);
@@ -117,5 +137,33 @@ class ProductController extends Controller
         $product->delete();
 
         return back()->with('success', 'Product deleted successfully!');
+    }
+
+    //Men,women products
+    public function menProducts()
+    {
+        $products = Product::where('category', 'men')->latest()->get();
+        return view('frontend.men', compact('products'));
+    }
+
+    public function womenProducts()
+    {
+        $products = Product::where('category', 'women')->latest()->get();
+        return view('frontend.women', compact('products'));
+    }
+
+    // DETAILED VIEW PRODUCT
+    public function show($id)
+    {
+        $product = Product::findOrFail($id);
+
+
+        $relatedProducts = Product::where('category', $product->category)
+            ->where('id', '!=', $product->id)
+            ->latest()
+            ->take(4)
+            ->get();
+
+        return view('product.show', compact('product', 'relatedProducts'));
     }
 }

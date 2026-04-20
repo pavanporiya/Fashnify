@@ -81,9 +81,13 @@
                             </div>
 
                             <small class="text-muted">
-                                {{ ucfirst($product->category) }}
-                            </small>
-                        </div>
+            {{ ucfirst($product->category) }}
+        </small>
+        
+        <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-dark mt-2">
+            View
+        </a>
+    </div>
 
                     </div>
                 </div>

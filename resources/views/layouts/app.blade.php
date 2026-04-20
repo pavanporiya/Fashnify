@@ -39,15 +39,22 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-link-modern" href="/men">
-                        <i class="fas fa-male me-1"></i>Men
+                    <a class="nav-link nav-link-modern @if(request()->routeIs('products.index')) active @endif" href="{{ route('products.index') }}">
+                        <i class="fas fa-store me-1"></i>Shop
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-link-modern" href="/women">
-                        <i class="fas fa-female me-1"></i>Women
+                    <a class="nav-link nav-link-modern @if(request()->routeIs('about'))active @endif" href="/about">
+                        <i class="fas fa-info-circle me-1"></i>About
                     </a>
                 </li>
+                @if(count(session('cart', [])) > 0)
+                <li class="nav-item">
+                    <a href="{{ route('cart.index') }}" class="btn btn-outline-dark">
+                        Cart ({{ count(session('cart', [])) }})
+                    </a>
+                </li>
+                @endif
                 
                 @if(Auth::check())
                     @if(Auth::user()->role === 'admin')
