@@ -166,4 +166,19 @@ class ProductController extends Controller
 
         return view('product.show', compact('product', 'relatedProducts'));
     }
+    //suggestions
+    public function suggestions(Request $request)
+    {
+        $query = $request->query('query');
+
+        if (!$query) {
+            return response()->json([]);
+        }
+
+        $products = \App\Models\Product::where('name', 'LIKE', "%{$query}%")
+            ->limit(5)
+            ->get(['id', 'name']);
+
+        return response()->json($products);
+    }
 }

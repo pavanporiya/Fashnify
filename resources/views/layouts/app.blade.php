@@ -50,8 +50,10 @@
                 </li>
                 @if(count(session('cart', [])) > 0)
                 <li class="nav-item">
-                    <a href="{{ route('cart.index') }}" class="btn btn-outline-dark">
-                        Cart ({{ count(session('cart', [])) }})
+                    <a href="{{ route('cart.index') }}" 
+                        class="nav-link nav-link-modern d-inline-block">
+                            <i class="fas fa-shopping-cart me-1"></i>
+                            Cart ({{ count(session('cart', [])) }})
                     </a>
                 </li>
                 @endif
@@ -100,6 +102,6 @@
 <script src="{{ asset('frontend/js/plugins.js') }}"></script>
 <script src="{{ asset('frontend/js/script.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+@yield('scripts')
 </body>
 </html>
