@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -12,7 +13,8 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
-    //login logic
+
+    // LOGIN
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -29,25 +31,52 @@ class AuthController extends Controller
         return back()->with('error', 'Invalid credentials');
     }
 
-    //show register form
+    // SHOW REGISTER
     public function showRegister()
     {
         return view('auth.register');
     }
 
-    //register logic
+    // REGISTER
     public function register(Request $request)
     {
-        $user = User::create([
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6'
+        ]);
+
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user'
         ]);
 
-        return redirect('/login');
+        return redirect('/login')->with('success', 'Account created successfully!');
     }
-    // Logout
+
+    // 🔥 NEW: UPDATE PROFILE
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string'
+        ]);
+
+        $user = Auth::user();
+
+        $user->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address
+        ]);
+
+        return back()->with('success', 'Profile updated successfully!');
+    }
+
+    // LOGOUT
     public function logout()
     {
         Auth::logout();

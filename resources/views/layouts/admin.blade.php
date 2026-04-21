@@ -29,6 +29,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="/" class="nav-link nav-link-admin" target="_blank">
+                    <i class="fas fa-external-link-alt me-2"></i>View Website
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="/admin/products" class="nav-link nav-link-admin {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
                     <i class="fas fa-box me-2"></i>Products
                 </a>

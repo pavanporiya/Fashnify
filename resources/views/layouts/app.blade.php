@@ -48,6 +48,7 @@
                         <i class="fas fa-info-circle me-1"></i>About
                     </a>
                 </li>
+
                 @if(count(session('cart', [])) > 0)
                 <li class="nav-item">
                     <a href="{{ route('cart.index') }}" 
@@ -59,11 +60,19 @@
                 @endif
                 
                 @if(Auth::check())
+
+                    <!-- 🔥 NEW: MY PROFILE -->
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern @if(request()->routeIs('profile')) active @endif" href="{{ route('profile') }}">
+                            <i class="fas fa-user me-1"></i>My Profile
+                        </a>
+                    </li>
+
                     @if(Auth::user()->role === 'admin')
                         <li class="nav-item">
-    <a class="nav-link nav-link-modern" href="/admin">
-        <i class="fas fa-tachometer-alt me-1"></i>Admin Panel
-    </a>
+                            <a class="nav-link nav-link-modern" href="/admin">
+                                <i class="fas fa-tachometer-alt me-1"></i>Admin Panel
+                            </a>
                         </li>
                     @endif
                     
@@ -75,6 +84,7 @@
                             </button>
                         </form>
                     </li>
+
                 @else
                     <li class="nav-item">
                         <a class="nav-link nav-link-modern" href="/register">
@@ -94,6 +104,17 @@
 
 <!-- PAGE CONTENT -->
 <main class="animate-slide">
+    @if(session('error'))
+        <div class="alert alert-danger text-center m-0">
+        {{ session('error') }}
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div class="alert alert-success text-center m-0">
+            {{ session('success') }}
+        </div>
+    @endif
     @yield('content')
 </main>
 

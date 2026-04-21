@@ -12,17 +12,32 @@
         <i class="fas fa-user-plus me-2"></i>Create Account
     </h1>
     
+    {{-- 🔥 IMPROVED ERROR DISPLAY --}}
     @if($errors->any())
         <div class="alert alert-danger mb-4">
-            <i class="fas fa-exclamation-circle me-2"></i>Please fix the errors below.
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <strong>Fix the following issues:</strong>
+            <ul class="mb-0 mt-2 text-start">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
     @endif
     
+    {{-- SUCCESS MESSAGE --}}
+    @if(session('success'))
+        <div class="alert alert-success mb-4">
+            <i class="fas fa-check-circle me-2"></i>
+            {{ session('success') }}
+        </div>
+    @endif
+
     <form method="POST" action="/register">
         @csrf
         
         <div class="form-floating">
-            <input type="text" name="name" class="form-control @error('name')is-invalid @enderror" id="name" placeholder="Full Name" value="{{ old('name') }}" required>
+            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="Full Name" value="{{ old('name') }}" required>
             <label for="name">
                 <i class="fas fa-user input-icon"></i>
                 Full Name
@@ -33,7 +48,7 @@
         </div>
         
         <div class="form-floating">
-            <input type="email" name="email" class="form-control @error('email')is-invalid @enderror" id="email-reg" placeholder="name@example.com" value="{{ old('email') }}" required>
+            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email-reg" placeholder="name@example.com" value="{{ old('email') }}" required>
             <label for="email-reg">
                 <i class="fas fa-envelope input-icon"></i>
                 Email Address
@@ -44,7 +59,7 @@
         </div>
         
         <div class="form-floating">
-            <input type="password" name="password" class="form-control @error('password')is-invalid @enderror" id="password-reg" placeholder="Password" required>
+            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password-reg" placeholder="Password" required>
             <label for="password-reg">
                 <i class="fas fa-lock input-icon"></i>
                 Password
@@ -55,7 +70,7 @@
         </div>
         
         <div class="form-floating">
-            <input type="password" name="password_confirmation" class="form-control @error('password_confirmation')is-invalid @enderror" id="password-confirm" placeholder="Confirm Password" required>
+            <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" id="password-confirm" placeholder="Confirm Password" required>
             <label for="password-confirm">
                 <i class="fas fa-lock-open input-icon"></i>
                 Confirm Password

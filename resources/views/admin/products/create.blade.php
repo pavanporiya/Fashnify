@@ -52,22 +52,28 @@
                                         placeholder="0.00" required>
                                 </div>
                             </div>
-
-                            <div class="mb-4">
-                                <label class="form-label fw-bold">Description</label>
-                                <textarea name="description" class="form-control modern-input" rows="4"
-                                    placeholder="Enter product description..."></textarea>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Stock</label>
+                                <input type="number" name="stock" class="form-control modern-input"
+                                    placeholder="Enter stock quantity" required>
                             </div>
-                            
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-primary btn-modern px-5">
-                                    <i class="fas fa-plus me-2"></i>Add Product
-                                </button>
-                            </div>
-                        </form>
                     </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Description</label>
+                        <textarea name="description" class="form-control modern-input" rows="4"
+                            placeholder="Enter product description..."></textarea>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary btn-modern px-5">
+                            <i class="fas fa-plus me-2"></i>Add Product
+                        </button>
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 @endsection

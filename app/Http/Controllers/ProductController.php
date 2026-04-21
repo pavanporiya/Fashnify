@@ -55,31 +55,36 @@ class ProductController extends Controller
     }
 
     // STORE
-    public function store(Request $req)
+    public function store(Request $request)
     {
-        $req->validate([
-            'name' => 'required|string|max:255',
+        $request->validate([
+            'name' => 'required|string',
             'price' => 'required|numeric',
             'category' => 'required|in:men,women',
-            'description' => 'nullable|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'stock' => 'required|numeric',
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:5120',
         ]);
 
-        $imagePath = null;
-        if ($req->hasFile('image')) {
-            $folder = 'products/' . $req->category; // men or women
-            $imagePath = $req->file('image')->store($folder, 'public');
+        try {
+
+            // IMAGE UPLOAD
+            $imagePath = $request->file('image')->store('products', 'public');
+
+            // SAVE
+            Product::create([
+                'name' => $request->name,
+                'price' => $request->price,
+                'category' => $request->category,
+                'stock' => $request->stock,
+                'description' => $request->description,
+                'image' => $imagePath,
+            ]);
+
+            return back()->with('success', 'Product added successfully!');
+
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        Product::create([
-            'name' => $req->name,
-            'description' => $req->description ?? 'No description',
-            'price' => $req->price,
-            'category' => $req->category,
-            'image' => $imagePath,
-        ]);
-
-        return redirect('/admin/products')->with('success', 'Product added successfully!');
     }
 
     // EDIT
@@ -120,6 +125,7 @@ class ProductController extends Controller
             'description' => $req->description ?? 'No description',
             'price' => $req->price,
             'category' => $req->category,
+            'stock' => $req->stock ?? $product->stock,
         ]);
 
         return redirect('/admin/products')->with('success', 'Product updated successfully!');

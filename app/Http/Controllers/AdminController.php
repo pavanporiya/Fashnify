@@ -5,9 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
-
+use App\Models\Order;
 class AdminController extends Controller
 {
+    public function users()
+    {
+        $users = \App\Models\User::all();
+        return view('admin.users.index', compact('users'));
+    }
     public function dashboard()
     {
         $productCount = Product::count();
@@ -34,5 +39,23 @@ class AdminController extends Controller
     {
         $user->delete();
         return back()->with('success', 'User deleted successfully!');
+    }
+    public function ordersIndex()
+    {
+        $orders = Order::with('items.product', 'user')
+            ->latest()
+            ->get();
+
+        return view('admin.orders.index', compact('orders'));
+    }
+
+    public function updateOrderStatus(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        $order->status = $request->status;
+        $order->save();
+
+        return back()->with('success', 'Order status updated!');
     }
 }
